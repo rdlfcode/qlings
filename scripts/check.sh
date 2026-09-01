@@ -14,6 +14,16 @@ cd "$ROOT"
 # templates allowed to contain a deliberate lone-slash block comment
 BLOCK_COMMENT_OK="core23_reserved"
 
+# The storage and IPC exercises query a real partitioned database. Build it
+# once if this is a fresh checkout, otherwise those tests die before they can
+# report anything -- and leak the q server they spawned.
+if [ ! -d data/db ]; then
+  echo "building the sample database ..."
+  if ! QLINGS_ROOT="$ROOT" "$Q" data/gen.q -q >/dev/null 2>&1; then
+    echo "FATAL    could not build data/db with $Q"; exit 1
+  fi
+fi
+
 names=("$@")
 if [ ${#names[@]} -eq 0 ]; then
   mapfile -t names < <(grep -oP '^name\s*=\s*"\K[^"]+' info.toml)
