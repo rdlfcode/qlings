@@ -7,8 +7,6 @@
 
 / Fix each TODO below until every check passes.
 
-/ I AM NOT DONE
-
 / TODO: a long atom holding 42
 answer:0N
 

@@ -2,9 +2,6 @@ use anyhow::{anyhow, Context, Result};
 use serde::Deserialize;
 use std::path::{Path, PathBuf};
 
-/// The marker a learner deletes once they have solved an exercise.
-pub const NOT_DONE: &str = "I AM NOT DONE";
-
 #[derive(Debug, Deserialize)]
 pub struct Info {
     pub exercises: Vec<Exercise>,
@@ -31,14 +28,6 @@ impl Exercise {
     }
     pub fn solution_path(&self, root: &Path) -> PathBuf {
         root.join("solutions").join(&self.dir).join(format!("{}.q", self.name))
-    }
-
-    /// True while the learner has not yet removed the marker line.
-    pub fn not_done(&self, root: &Path) -> Result<bool> {
-        let p = self.path(root);
-        let src = std::fs::read_to_string(&p)
-            .with_context(|| format!("reading {}", p.display()))?;
-        Ok(src.contains(NOT_DONE))
     }
 }
 

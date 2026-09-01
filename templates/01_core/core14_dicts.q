@@ -1,11 +1,9 @@
 / core14_dicts -- dictionaries
-/
+
 / A dictionary maps a list of keys to a list of values, built with `!`:
 /   `a`b!1 2
 / Index it like a list: d`b. `key` and `value` pull the two halves back
 / out, and joining two dictionaries with `,` lets the right-hand one win.
-/
-/ I AM NOT DONE
 
 / TODO: a dictionary mapping `a`b`c to 1 2 3
 d:()!()

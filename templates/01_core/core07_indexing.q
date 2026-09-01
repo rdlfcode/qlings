@@ -1,11 +1,9 @@
 / core07_indexing -- getting items out
-/
+
 / Indexing is just function application: xs[2] and xs 2 are the same.
 / Index with a LIST to get a list back. Out-of-range indexing returns a
 / null rather than signalling. `#` takes from the front (negative takes
 / from the back) and `_` drops.
-/
-/ I AM NOT DONE
 
 xs:100 200 300 400 500
 

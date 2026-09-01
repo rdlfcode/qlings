@@ -1,14 +1,12 @@
 / ts14_aj_gaps -- what asof does at the edges
-/
+
 / An asof join never invents data. If nothing has been seen yet for that
 / sym, the joined columns come back NULL -- and because a null float is
 / 0n, an unwary sum or avg over the result will quietly skip those rows
 / rather than warn you.
-/
+
 / The MSFT trade at 09:30:05 happens before the first MSFT quote, so it
 / is the row that shows this.
-/
-/ I AM NOT DONE
 
 sq:update `p#sym from `sym`time xasc quote
 joined:aj[`sym`time; trade; sq]

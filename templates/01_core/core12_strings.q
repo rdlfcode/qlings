@@ -1,11 +1,9 @@
 / core12_strings -- chars, strings and symbols
-/
+
 / A q "string" is a LIST of chars, so "abc" has count 3 and type 10h.
 / Watch out: "a" is a single char ATOM, type -10h, not a one-item string.
 / A symbol like `abc is a single interned ATOM with count 1 -- use
 / symbols for repeated labels, strings for text you take apart.
-/
-/ I AM NOT DONE
 
 / TODO: how many characters are in "hello"?
 len:0N

@@ -1,11 +1,9 @@
 / tbl13_ij_uj -- inner and union joins
-/
+
 / `t ij k` is like lj but DROPS rows with no match in the keyed table k.
 / `t uj u` is a union: it stacks two tables, widening to the union of
 / their columns and filling the gaps with nulls. Use uj when the two
 / tables describe the same kind of thing but not identically.
-/
-/ I AM NOT DONE
 
 / TODO: emp inner-joined to dept
 inner:()

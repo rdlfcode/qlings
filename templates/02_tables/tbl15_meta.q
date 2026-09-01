@@ -1,11 +1,9 @@
 / tbl15_meta -- inspecting a table
-/
+
 / `meta t` returns a keyed table describing each column: `t` is the type
 / as a CHAR (j long, f float, s symbol, i int, t time), `f` any foreign
 / key, and `a` the attribute. It is the first thing to run against a
 / table you have never seen.
-/
-/ I AM NOT DONE
 
 m:meta trade
 

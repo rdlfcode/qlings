@@ -1,11 +1,9 @@
 / ts02_arithmetic -- doing sums with time
-/
+
 / Because temporal values are numbers, arithmetic just works: adding an
 / integer to a date adds days, and subtracting two dates gives the days
 / between. Adding a date to a time gives you a timestamp, which is how
 / you stitch the two halves together.
-/
-/ I AM NOT DONE
 
 d:2024.03.15
 

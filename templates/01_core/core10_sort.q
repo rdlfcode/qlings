@@ -1,11 +1,9 @@
 / core10_sort -- sorting, ranking and grouping
-/
+
 / `asc` and `desc` sort. `iasc` gives the INDEXES that would sort a list,
 / which is how you sort one list by another. `rank` gives each item's
 / position in sorted order, `distinct` removes duplicates, and `group`
 / builds a dictionary from each distinct value to where it occurs.
-/
-/ I AM NOT DONE
 
 ys:30 10 20
 

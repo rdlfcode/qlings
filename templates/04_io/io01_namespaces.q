@@ -1,11 +1,9 @@
 / io01_namespaces -- organising code
-/
+
 / A namespace is a dictionary hanging off the root, named with a leading
 / dot: .util.double is `double` inside `.util`. Every kdb codebase uses
 / them, and the ones starting .z, .Q and .j are q's own.
 / `key `.util` lists what is in one.
-/
-/ I AM NOT DONE
 
 / TODO: define `double` inside a namespace called .util
 /       so that .util.double 21 is 42

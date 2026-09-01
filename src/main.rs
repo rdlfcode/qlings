@@ -1,6 +1,7 @@
 mod exercise;
 mod report;
 mod runner;
+mod state;
 
 use anyhow::{bail, Context, Result};
 use clap::{Parser, Subcommand};
@@ -8,6 +9,7 @@ use exercise::{Exercise, Info};
 use notify::{Config, EventKind, RecommendedWatcher, RecursiveMode, Watcher};
 use report::*;
 use runner::{ProcessRunner, Runner};
+use state::State;
 use std::path::{Path, PathBuf};
 use std::sync::mpsc;
 use std::time::{Duration, Instant};
@@ -28,7 +30,11 @@ struct Cli {
 #[derive(Subcommand)]
 enum Cmd {
     /// Work through the exercises in order, stopping at the first unsolved one
-    Verify,
+    Verify {
+        /// Re-run every exercise, including ones already recorded as done
+        #[arg(long)]
+        all: bool,
+    },
     /// Re-run the current exercise every time you save a file
     Watch,
     /// List every exercise and whether it is done
@@ -58,17 +64,18 @@ fn real_main() -> Result<()> {
     let info = Info::load(&root)?;
     let q = find_q(cli.q)?;
     let runner = ProcessRunner::new(root.clone(), q, Duration::from_secs(cli.timeout));
+    let mut state = State::load(&root)?;
 
-    match cli.cmd.unwrap_or(Cmd::Verify) {
+    match cli.cmd.unwrap_or(Cmd::Verify { all: false }) {
         Cmd::Setup => setup(&root, &info, &runner),
-        Cmd::List => list(&root, &info),
-        Cmd::Verify => {
+        Cmd::List => list(&info, &state),
+        Cmd::Verify { all } => {
             ensure_files(&root, &info)?;
-            verify(&root, &info, &runner).map(|_| ())
+            verify(&root, &info, &runner, &mut state, all).map(|_| ())
         }
         Cmd::Watch => {
             ensure_files(&root, &info)?;
-            watch(&root, &info, &runner)
+            watch(&root, &info, &runner, &mut state)
         }
         Cmd::Run { name } => {
             ensure_files(&root, &info)?;
@@ -76,10 +83,10 @@ fn real_main() -> Result<()> {
             header(ex);
             let o = runner.run(ex)?;
             let ok = outcome(ex, &root, &o);
-            if ok && ex.not_done(&root)? {
-                still_marked(ex);
-            }
-            if !ok {
+            if ok {
+                state.mark_done(&ex.name)?;
+            } else {
+                state.mark_todo(&ex.name)?;
                 std::process::exit(1);
             }
             Ok(())
@@ -95,6 +102,7 @@ fn real_main() -> Result<()> {
             std::fs::create_dir_all(to.parent().unwrap())?;
             std::fs::copy(&from, &to)
                 .with_context(|| format!("restoring {}", to.display()))?;
+            state.mark_todo(&ex.name)?;
             println!("{YELLOW}reset{RESET} {}", to.display());
             Ok(())
         }
@@ -131,7 +139,7 @@ fn ensure_files(root: &Path, info: &Info) -> Result<()> {
 
 fn setup(root: &Path, info: &Info, runner: &ProcessRunner) -> Result<()> {
     ensure_files(root, info)?;
-    println!("{GREEN}ok{RESET}   exercise files in {}", root.join("exercises").display());
+    println!("{GREEN}OK{RESET}   exercise files in {}", root.join("exercises").display());
 
     let gen = root.join("data").join("gen.q");
     if gen.exists() {
@@ -145,46 +153,52 @@ fn setup(root: &Path, info: &Info, runner: &ProcessRunner) -> Result<()> {
         if !st.success() {
             bail!("data/gen.q failed");
         }
-        println!("{GREEN}ok{RESET}   sample database in {}", root.join("data/db").display());
+        println!("{GREEN}OK{RESET}   sample database in {}", root.join("data/db").display());
     }
     println!("\nStart with: {BOLD}qlings watch{RESET}");
     Ok(())
 }
 
-fn list(root: &Path, info: &Info) -> Result<()> {
-    let mut done = 0;
+fn list(info: &Info, state: &State) -> Result<()> {
     for ex in &info.exercises {
-        let state = if !ex.path(root).exists() {
-            format!("{DIM}  -  {RESET}")
-        } else if ex.not_done(root)? {
-            format!("{YELLOW} todo{RESET}")
-        } else {
-            done += 1;
+        let mark = if state.is_done(&ex.name) {
             format!("{GREEN} done{RESET}")
+        } else {
+            format!("{YELLOW} todo{RESET}")
         };
-        println!("{state}  {BOLD}{:<24}{RESET} {DIM}{}{RESET}", ex.name, ex.about);
+        println!("{mark}  {BOLD}{:<24}{RESET} {DIM}{}{RESET}", ex.name, ex.about);
     }
     println!();
-    progress(done, info.exercises.len());
+    progress(state.count(), info.exercises.len());
     Ok(())
 }
 
-/// Walk the list in order. Returns the first exercise that is not finished.
-fn verify<'a>(root: &Path, info: &'a Info, runner: &dyn Runner) -> Result<Option<&'a Exercise>> {
+/// Walk the list in order, returning the first exercise that does not pass.
+///
+/// Exercises already recorded as done are skipped rather than re-run, so watch
+/// mode stays instant however far in you are. `all` ignores that record and
+/// re-runs everything, which is the way to re-validate the whole set.
+fn verify<'a>(
+    root: &Path,
+    info: &'a Info,
+    runner: &dyn Runner,
+    state: &mut State,
+    all: bool,
+) -> Result<Option<&'a Exercise>> {
     for (i, ex) in info.exercises.iter().enumerate() {
-        let o = runner.run(ex)?;
-        let passed = o.passed();
-        let marked = ex.not_done(root)?;
-        if passed && !marked {
+        if !all && state.is_done(&ex.name) {
             continue;
         }
+        let o = runner.run(ex)?;
+        if o.passed() {
+            state.mark_done(&ex.name)?;
+            continue;
+        }
+        state.mark_todo(&ex.name)?;
         progress(i, info.exercises.len());
         println!();
         header(ex);
         outcome(ex, root, &o);
-        if passed && marked {
-            still_marked(ex);
-        }
         return Ok(Some(ex));
     }
     progress(info.exercises.len(), info.exercises.len());
@@ -192,7 +206,7 @@ fn verify<'a>(root: &Path, info: &'a Info, runner: &dyn Runner) -> Result<Option
     Ok(None)
 }
 
-fn watch(root: &Path, info: &Info, runner: &dyn Runner) -> Result<()> {
+fn watch(root: &Path, info: &Info, runner: &dyn Runner, state: &mut State) -> Result<()> {
     let (tx, rx) = mpsc::channel();
     let mut watcher = RecommendedWatcher::new(
         move |res: notify::Result<notify::Event>| {
@@ -207,7 +221,7 @@ fn watch(root: &Path, info: &Info, runner: &dyn Runner) -> Result<()> {
     watcher.watch(&root.join("exercises"), RecursiveMode::Recursive)?;
 
     print!("\x1b[2J\x1b[H");
-    verify(root, info, runner)?;
+    verify(root, info, runner, state, false)?;
     println!("\n{DIM}watching exercises/ -- save a file to re-run, ctrl-c to stop{RESET}");
 
     let mut last = Instant::now() - Duration::from_secs(1);
@@ -222,7 +236,7 @@ fn watch(root: &Path, info: &Info, runner: &dyn Runner) -> Result<()> {
         }
         last = Instant::now();
         print!("\x1b[2J\x1b[H");
-        if verify(root, info, runner)?.is_none() {
+        if verify(root, info, runner, state, false)?.is_none() {
             break;
         }
         println!("\n{DIM}watching exercises/ -- save a file to re-run, ctrl-c to stop{RESET}");

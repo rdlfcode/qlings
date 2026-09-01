@@ -4,8 +4,6 @@
 / `count` gives the length, `first` and `last` the ends, `,` joins,
 / and `reverse` flips. `til n` makes 0 1 .. n-1.
 
-/ I AM NOT DONE
-
 / TODO: the long list 10 20 30
 xs:()
 

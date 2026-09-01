@@ -1,12 +1,10 @@
 / core05_arithmetic -- atomic operators and aggregations
-/
+
 / Arithmetic is ATOMIC: it burrows into lists and applies item by item,
 / pairing a list with an atom or two equal-length lists.
-/
+
 / Watch out: % is DIVIDE in q, not modulo. Integer division is `div`
 / and the remainder is `mod`. Dividing with % always gives a float.
-/
-/ I AM NOT DONE
 
 / TODO: add 10 to every item of 1 2 3
 shifted:()

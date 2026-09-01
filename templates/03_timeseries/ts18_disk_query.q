@@ -1,20 +1,18 @@
 / ts18_disk_query -- what changes once the data is on disk
-/
+
 / A partitioned table is not an in-memory table, and some things simply
 / do not work on it:
 /   - `exec` straight off a partitioned table signals 'nyi
 /   - `xkey` on a mapped splayed table signals 'type
 / The fix is always the same: `select` the slice you need into memory
 / first, then treat it as an ordinary table.
-/
+
 / Two more surprises live here. Rows come back in the order they are
 / STORED -- parted by sym, not by time. And a symbol column on disk is an
 / ENUMERATION over the sym file, which does not match a plain symbol list
 / until you run `value` over it.
-/
+
 / The database is already loaded.
-/
-/ I AM NOT DONE
 
 / TODO: prove it -- trap `exec price from trades` and keep the error text
 whatHappens:()

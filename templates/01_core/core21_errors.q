@@ -1,13 +1,11 @@
 / core21_errors -- signalling and trapping
-/
+
 / `'"boom"` signals an error. To catch one, use the ternary forms of
 / apply:
 /   @[f;arg;handler]      one argument
 /   .[f;arglist;handler]  several
 / The handler is called with the error text when f fails, so it doubles
 / as a default value. Without a handler the error propagates.
-/
-/ I AM NOT DONE
 
 / TODO: a function that signals the error "negative" when x<0,
 /       and otherwise returns x

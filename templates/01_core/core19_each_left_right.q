@@ -1,12 +1,10 @@
 / core19_each_left_right -- \: and /: and '
-/
+
 / These pair one argument up against every item of the other:
 /   x f\: y   each-LEFT:  every item of x against the whole of y
 /   x f/: y   each-RIGHT: the whole of x against every item of y
 /   x f'  y   each-BOTH:  item by item, in step
 / Remember which is which by the slash leaning toward the side it splits.
-/
-/ I AM NOT DONE
 
 / TODO: is each of 1 2 3 in the list 1 2? (each-left)
 membership:()

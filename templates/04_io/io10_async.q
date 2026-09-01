@@ -1,14 +1,12 @@
 / io10_async -- fire and forget
-/
+
 / `neg[h] message` sends ASYNCHRONOUSLY: it returns immediately and gives
 / you nothing back, so it is for telling the remote to do something, not
 / for asking it a question.
-/
+
 / The message may still be sitting in a buffer when you move on. A later
 / synchronous call flushes it, because the remote handles messages in
 / order -- which is the usual way to make sure an async send landed.
-/
-/ I AM NOT DONE
 
 h:hopen `$":localhost:",string PORT
 

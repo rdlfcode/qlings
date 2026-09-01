@@ -1,11 +1,9 @@
 / ts05_windows -- selecting a time range
-/
+
 / A time range is just two constraints, and putting the cheapest first
 / matters: q applies them in order, so narrowing by time before doing
 / anything expensive is the whole game on a large table.
 / `within` says the same thing more compactly.
-/
-/ I AM NOT DONE
 
 / TODO: trades from 09:31:00 up to and including 09:32:15, using two
 /       comparisons

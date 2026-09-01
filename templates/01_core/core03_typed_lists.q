@@ -6,8 +6,6 @@
 / `enlist` makes a one-item list -- note that `enlist 42` is NOT 42.
 / `raze` flattens one level of nesting.
 
-/ I AM NOT DONE
-
 / TODO: a simple long list: 1 2 3
 simple:()
 

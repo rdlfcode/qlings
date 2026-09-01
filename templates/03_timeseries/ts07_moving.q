@@ -1,11 +1,9 @@
 / ts07_moving -- moving windows
-/
+
 / `n mavg x` is the moving average over the last n items, and there are
 / matching msum, mmax, mmin and mdev. They do NOT pad with nulls: the
 / first n-1 results are computed over however many items exist so far,
 / so the series is the same length as its input.
-/
-/ I AM NOT DONE
 
 xs:1 2 3 4 5
 

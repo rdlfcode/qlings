@@ -1,12 +1,10 @@
 / tbl10_keyed -- keyed tables
-/
+
 / `` `col xkey t `` promotes a column to the KEY. A keyed table indexes
 / like a dictionary -- k[`bob] gives a row -- and it is what joins and
 / `by` results are built on. `0!k` unkeys it back to a plain table.
-/
+
 / The `emp` and `dept` tables are provided (see data/fixtures.q).
-/
-/ I AM NOT DONE
 
 / TODO: emp keyed on name
 byName:()

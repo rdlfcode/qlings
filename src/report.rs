@@ -31,11 +31,11 @@ pub fn outcome(ex: &Exercise, root: &Path, o: &Outcome) -> bool {
 
     for c in &o.checks {
         if c.ok {
-            println!("{GREEN}ok{RESET}   {}", c.name);
+            println!("{GREEN}OK{RESET}   {}", c.name);
         } else {
             println!("{RED}FAIL{RESET} {}", c.name);
-            println!("       expected: {GREEN}{}{RESET}", c.expected);
-            println!("       actual:   {RED}{}{RESET}", c.actual);
+            field("expected", &c.expected, GREEN);
+            field("actual", &c.actual, RED);
         }
     }
 
@@ -51,14 +51,6 @@ pub fn outcome(ex: &Exercise, root: &Path, o: &Outcome) -> bool {
     passed
 }
 
-pub fn still_marked(ex: &Exercise) {
-    println!(
-        "\n{YELLOW}!{RESET} Checks pass, but the {BOLD}{}{RESET} line is still in the file.",
-        crate::exercise::NOT_DONE
-    );
-    println!("  Delete that line to move on to the next exercise.");
-    let _ = ex;
-}
 
 pub fn progress(done: usize, total: usize) {
     let width = 40usize;
@@ -68,4 +60,18 @@ pub fn progress(done: usize, total: usize) {
         "#".repeat(filled),
         "-".repeat(width - filled)
     );
+}
+
+/// One side of a diff. A grid (from `.Q.s`) is printed as an indented block
+/// under its label; a one-liner stays on the label's own line.
+fn field(label: &str, value: &str, colour: &str) {
+    let l = format!("{label}:");
+    if value.contains('\n') {
+        println!("       {l}");
+        for line in value.lines() {
+            println!("         {colour}{line}{RESET}");
+        }
+    } else {
+        println!("       {l:<10}{colour}{value}{RESET}");
+    }
 }

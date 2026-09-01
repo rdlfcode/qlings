@@ -1,5 +1,5 @@
 / io09_messages -- the two ways to send a request
-/
+
 / A message can be a STRING, which the remote parses and evaluates:
 /   h"lastPrice `AAPL"
 / or a LIST, whose first item is the function and the rest its arguments:
@@ -7,8 +7,6 @@
 / The list form is the one to use: nothing is parsed at the far end, the
 / arguments keep their types, and no one can inject code into your
 / string. The remote already defines lastPrice and vwapBySym.
-/
-/ I AM NOT DONE
 
 h:hopen `$":localhost:",string PORT
 

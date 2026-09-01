@@ -1,12 +1,10 @@
 / core08_amend -- changing items
-/
+
 / q values are immutable; you build a NEW list with the change applied.
 / @[list;indexes;operator;operand] does that:
 /   @[xs;0;:;99]    replace index 0 with 99
 /   @[xs;1;+;5]     add 5 to index 1
 / Assigning through an index, xs[0]:99, rebinds the variable instead.
-/
-/ I AM NOT DONE
 
 xs:100 200 300 400 500
 

@@ -1,13 +1,11 @@
 / core24_scope -- locals, globals and ::
-/
+
 / Assigning inside a lambda creates a LOCAL, invisible outside it.
 / To write to a global from inside a function you need `::` instead:
 /   {counter::42}
 / Functions can read globals freely; they just cannot rebind them with a
 / plain colon. There is no block scope -- a local belongs to the whole
 / lambda.
-/
-/ I AM NOT DONE
 
 total:0
 

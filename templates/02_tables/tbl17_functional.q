@@ -1,5 +1,5 @@
 / tbl17_functional -- select built as data
-/
+
 / qSQL is sugar over `?[table;constraints;by;columns]`, where each part is
 / built from lists instead of syntax:
 /   constraints: a list of (operator; column; value) triples, with the
@@ -7,8 +7,6 @@
 /   by:          0b for none, or a dictionary of name!column
 /   columns:     () for all, or a dictionary of name!expression
 / Use it when the columns are decided at run time.
-/
-/ I AM NOT DONE
 
 / TODO: the functional form of: select from trade where sym=`GOOG
 googs:()

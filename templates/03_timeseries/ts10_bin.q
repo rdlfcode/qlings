@@ -1,11 +1,9 @@
 / ts10_bin -- binary search with bin
-/
+
 / `xs bin y` finds, for each y, the index of the LAST item of xs that is
 / less than or equal to y. xs must be sorted. That "last one at or before"
 / rule is exactly asof semantics, and `bin` is what aj is built on.
 / A y before everything gives -1.
-/
-/ I AM NOT DONE
 
 grid:09:30 09:35 09:40
 

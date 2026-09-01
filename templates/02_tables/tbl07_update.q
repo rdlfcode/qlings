@@ -1,11 +1,9 @@
 / tbl07_update -- update, and update by
-/
+
 / `update` returns a NEW table with columns changed or added; the
 / original is untouched unless you assign back over it. A `where` limits
 / which rows change, and a `by` computes the new value per group -- which
 / is how you write things like "price relative to this sym's average".
-/
-/ I AM NOT DONE
 
 / TODO: trade with a new column notional = price*size
 withNotional:()

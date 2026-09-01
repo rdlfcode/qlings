@@ -265,6 +265,12 @@ about = "grouping by more than one thing"
 hint = "by takes several comma-separated expressions, and they can be computed: `by sym, big:size>200`. Each becomes a column of the result's key."
 
 [[exercises]]
+name = "tbl21_notation"
+dir = "02_tables"
+about = "reading q's compact notation"
+hint = "`.Q.s1` gives the one-line form and `.Q.s` the grid. In the compact form + is flip and , is enlist. It is display-only: `value` chokes on the leading +, so use flip, or -8!/-9! to round-trip."
+
+[[exercises]]
 name = "ts01_types"
 dir = "03_timeseries"
 about = "the temporal types"

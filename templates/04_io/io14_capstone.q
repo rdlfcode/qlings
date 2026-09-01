@@ -1,20 +1,18 @@
 / io14_capstone -- put it all together
-/
+
 / One realistic pipeline, using every chapter:
 /   read a slice out of the partitioned database on disk,
 /   aggregate it, enrich it from a reference table,
 /   ship the result to another process, and read it back.
-/
+
 / One last trap. Symbol columns that came off disk are ENUMERATIONS
 / (type 20h) over that database's sym file. The process you send them to
 / has no such file, so they arrive as plain symbols (11h) and the table
 / you get back will not match the one you sent. De-enumerate with `value`
 / over every symbol column before shipping -- here that is both `sym` and
 / the `name` column the join brought along.
-/
+
 / The database is loaded and a bare q server is running on PORT.
-/
-/ I AM NOT DONE
 
 / TODO: the trades for 2024.01.03 only, pulled into memory
 day:()

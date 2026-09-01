@@ -1,10 +1,8 @@
 / tbl14_xcol -- renaming and reordering columns
-/
+
 / `` `a`b xcol t `` renames the FIRST columns positionally.
 / `` `b xcols t `` moves named columns to the front, keeping the rest.
 / Neither touches the data, and both return a new table.
-/
-/ I AM NOT DONE
 
 small:select name,dept,salary from emp
 

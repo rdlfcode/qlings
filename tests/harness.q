@@ -7,8 +7,13 @@ system"c 25 200";
 
 .qlings.results:();
 
-/ pretty-print a value for the diff, truncating pathological cases
-.qlings.show:{[x] s:$[10h=type x;"\"",x,"\"";.Q.s1 x]; $[400<count s;(400#s),"...";s]};
+/ Render a value for the diff. Tables and dictionaries go through .Q.s, which
+/ draws the readable grid; everything else through .Q.s1, which stays on one
+/ line. Long values are truncated so a runaway result cannot flood the report.
+.qlings.show:{[x]
+  t:type x;
+  s:$[t in 98 99h; -1_ .Q.s x; .Q.s1 x];
+  $[600<count s;(600#s),"...";s]};
 
 .qlings.add:{[name;ok;err;wanted;got]
   .qlings.results,:enlist `name`ok`err`expected`actual!(name;ok;err;wanted;got); ok};

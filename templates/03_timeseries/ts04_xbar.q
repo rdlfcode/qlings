@@ -1,11 +1,9 @@
 / ts04_xbar -- bucketing with xbar
-/
+
 / `n xbar x` rounds every item of x DOWN to a multiple of n. That one
 / operator is how all time bucketing works in q: because a time is
 / milliseconds, 60000 xbar time gives minute buckets, and because a
 / minute is minutes, 5 xbar minutes gives five-minute buckets.
-/
-/ I AM NOT DONE
 
 / TODO: round 0 3 7 11 down to multiples of 5
 rounded:()

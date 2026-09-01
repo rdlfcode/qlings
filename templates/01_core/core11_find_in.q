@@ -1,10 +1,8 @@
 / core11_find_in -- searching and set operations
-/
+
 / `list?x` FINDS the index of the first x (or the count of the list if it
 / is not there). `in` asks the opposite question and is atomic on its
 / left argument. `except`, `inter` and `union` are set operations.
-/
-/ I AM NOT DONE
 
 zs:10 20 30
 

@@ -1,11 +1,9 @@
 / ts08_running -- running totals
-/
+
 / Where the m- functions look back a fixed number of items, `sums`,
 / `maxs`, `mins` and `prds` accumulate over EVERYTHING seen so far.
 / They are just scan (\) over the matching operator, so they cost one
 / pass and no memory.
-/
-/ I AM NOT DONE
 
 xs:1 2 3 4
 

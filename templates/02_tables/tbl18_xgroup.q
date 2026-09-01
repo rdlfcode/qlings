@@ -1,11 +1,9 @@
 / tbl18_xgroup -- nesting and unnesting
-/
+
 / `` `col xgroup t `` keys on col and collapses every other column into a
 / nested list per key. `ungroup` is the inverse: it explodes nested
 / columns back into flat rows. Nested columns are how q stores
 / variable-length things without a second table.
-/
-/ I AM NOT DONE
 
 small:select sym,price from trade
 

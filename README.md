@@ -2,13 +2,13 @@
 
 Small, broken q programs you fix until they pass — [Rustlings](https://github.com/rust-lang/rustlings), for kdb+/q.
 
-76 exercises across four chapters. Each is a `.q` file with holes in it and a
+77 exercises across four chapters. Each is a `.q` file with holes in it and a
 hidden test file that checks your answer. A Rust CLI watches the files and
 re-runs the current exercise every time you save.
 
 ```
 core01_atoms -- atoms and the type system
-ok   answer is the long 42
+OK   answer is the long 42
 FAIL ratio is the float 2.5
        expected: 2.5
        actual:   0n
@@ -47,9 +47,13 @@ The runner looks for q via `--q`, then `$QLINGS_Q`, then `PATH`, then
 
 ## How you use it
 
-`./start.sh` runs the exercises in order and stops at the first unfinished one.
-Open the file it names, fix the `TODO`s until every check passes, then delete
-the `I AM NOT DONE` line to move on. Save the file and the checks re-run.
+`./start.sh` runs the exercises in order and stops at the first one that does not
+pass. Open the file it names and fix the `TODO`s. Save, and the checks re-run;
+when they all pass it moves straight on to the next exercise.
+
+Progress lives in `.qlings-state` (gitignored). Delete a line from it to redo an
+exercise, or delete the file to start over. `qlings verify --all` ignores it and
+re-runs the whole set from scratch.
 
 Any subcommand can be passed through the launcher (`./start.sh list`), or run
 the binary directly once built:
@@ -58,6 +62,7 @@ the binary directly once built:
 | --- | --- |
 | `qlings watch` | re-run the current exercise on every save |
 | `qlings verify` | run the list once, stop at the first failure |
+| `qlings verify --all` | re-run every exercise, ignoring recorded progress |
 | `qlings list` | every exercise and whether it is done |
 | `qlings run <name>` | run a single exercise |
 | `qlings hint <name>` | a nudge, not the answer |
@@ -77,10 +82,11 @@ search and set operations, strings versus symbols, casting, dictionaries,
 lambdas, projection, the adverbs (`each`, `over`, `scan`, each-left/right/prior),
 control flow, error trapping, `@`/`.`/`value`, and scope.
 
-**2. `02_tables` (20)** — what a table really is, columns and rows,
+**2. `02_tables` (21)** — what a table really is, columns and rows,
 `select`/`exec`/`update`/`delete`, computed columns, `by`, sorting, keyed tables,
 `upsert`, `lj`/`ij`/`uj`, `xcol`/`xcols`, `meta`, attributes, the functional form
-of select, `xgroup`/`ungroup`, the aggregation vocabulary, multi-column grouping.
+of select, `xgroup`/`ungroup`, the aggregation vocabulary, multi-column grouping,
+and how to read q's compact one-line notation.
 
 **3. `03_timeseries` (18)** — temporal types and arithmetic, extracting parts,
 `xbar` bucketing, time windows, `prev`/`deltas`, moving and running
@@ -127,11 +133,17 @@ The rule while writing this was that no expected value gets committed unless a q
 process produced it. That is enforced by `scripts/check.sh`, which runs the
 whole set two ways:
 
-1. every **reference solution** must pass all of its checks, and
-2. every **template** must fail at least one —
+1. every **reference solution** must pass all of its checks,
+2. every **template** must fail at least one — otherwise the exercise asks
+   nothing of the learner and would silently pass, and
+3. no template contains a lone `/` line, which opens a block comment that
+   swallows the rest of the file.
 
-otherwise the exercise asks nothing of the learner and would silently pass. It
-also verifies each template still carries its `I AM NOT DONE` marker.
+That third invariant exists because I shipped exactly that bug into 73 of the 76
+templates and did not notice: an inert template fails its checks in precisely
+the same way a correct one does, so invariant 2 could not see it. A learner
+would have written a correct answer and still been told it was undefined. The
+rule now is checked directly rather than inferred from behaviour.
 
 This caught real mistakes repeatedly, and they were nearly always mine rather
 than q's: an average I had worked out by hand as 175.75 when it was 163.25, a
@@ -139,7 +151,7 @@ time window I called three rows when it held four, a boolean mask written
 backwards. Several of the gotchas listed above were discovered exactly this way
 — the harness disagreed with me, and the harness was right.
 
-Current state: **76 exercises, 379 checks, all passing.**
+Current state: **77 exercises, 386 checks, all passing.**
 
 ### Why Rust for the infrastructure
 
@@ -224,6 +236,11 @@ printed, untouched. A run that produces no line at all is reported as a fatal
 error with q's own message, which is what a syntax error in your file looks
 like.
 
+Tables and dictionaries are rendered with `.Q.s`, so a failing table check
+shows two readable grids rather than q's one-line internal form; everything
+else uses `.Q.s1` and stays inline. That compact form is worth being able to
+read anyway, which is what `tbl21_notation` teaches.
+
 A test reads like this:
 
 ```q
@@ -272,6 +289,7 @@ because `.z.i` is an int and `~` is strict.)
 ```
 start.sh          launcher: build, set up, watch
 info.toml         the exercise list, order, descriptions and hints
+.qlings-state     which exercises have passed (gitignored)
 templates/        pristine exercises -- edit these to author
 exercises/        your working copy, created by setup (gitignored)
 tests/            the hidden test file for each exercise
@@ -289,8 +307,8 @@ scripts/killq.sh  kill q servers left behind by an interrupted run
 
 ## Authoring a new exercise
 
-1. Write `templates/<chapter>/<name>.q` with `TODO`s and the
-   `I AM NOT DONE` marker.
+1. Write `templates/<chapter>/<name>.q` with `TODO`s and stub values. Separate
+   comment paragraphs with blank lines, never a lone `/`.
 2. Write `solutions/<chapter>/<name>.q`.
 3. Write `tests/<chapter>/<name>_test.q`.
 4. Add an entry to `info.toml` — `name`, `dir`, `about`, `hint`. Position in the
@@ -298,7 +316,7 @@ scripts/killq.sh  kill q servers left behind by an interrupted run
 5. Verify:
 
 ```sh
-QLINGS_Q=~/.kx/bin/q ./scripts/check.sh <name>   # or omit the name for all 76
+QLINGS_Q=~/.kx/bin/q ./scripts/check.sh <name>   # or omit the name for all 77
 ```
 
 Do not hand-write an expected value you have not seen a q process produce. Print
