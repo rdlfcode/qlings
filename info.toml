@@ -1,0 +1,457 @@
+# The exercise list, in the order `qlings verify` walks it.
+
+[[exercises]]
+name = "core01_atoms"
+dir = "01_core"
+about = "atoms and the type system"
+hint = "`type` returns a short, so write 0h-style literals. An atom's type code is negative: `type 42` is -7h. Symbols are written with a backtick, booleans with a trailing b."
+
+[[exercises]]
+name = "core02_lists"
+dir = "01_core"
+about = "building and taking apart lists"
+hint = "A simple long list is just `10 20 30`. Use `count`, `first`, `last`, `reverse` and `til` rather than typing the answers out by hand -- `,` joins a value onto a list."
+
+[[exercises]]
+name = "core03_typed_lists"
+dir = "01_core"
+about = "simple lists, general lists and enlist"
+hint = "Semicolons and parentheses build a general list: (1;2.5;`a). `enlist 42` is a one-item list, which never matches the atom 42. `raze` removes one level of nesting."
+
+[[exercises]]
+name = "core04_nulls"
+dir = "01_core"
+about = "nulls and infinities"
+hint = "0N is the null long and 0W is long infinity. `null x` tests for null. `^` is fill: `0^list` replaces nulls with 0. Aggregations skip nulls, so `sum 1 0N 3` is 4."
+
+[[exercises]]
+name = "core05_arithmetic"
+dir = "01_core"
+about = "atomic operators and aggregations"
+hint = "% is divide and always returns a float; use `div` and `mod` for whole division and remainder. Operators pair a list with an atom or two lists of equal length."
+
+[[exercises]]
+name = "core06_match"
+dir = "01_core"
+about = "= compares, ~ matches"
+hint = "`=` is atomic and type-tolerant, so it returns a boolean LIST when given lists. `~` returns exactly one boolean and cares about type: 1~1h is false."
+
+[[exercises]]
+name = "core07_indexing"
+dir = "01_core"
+about = "getting items out of a list"
+hint = "xs[i] and xs i are the same thing. Index with a list to get a list. `#` takes (negative counts from the back) and `_` drops. Out-of-range indexing gives a null."
+
+[[exercises]]
+name = "core08_amend"
+dir = "01_core"
+about = "changing items with @"
+hint = "@[xs;i;op;operand] applies op at index i: use `:` to replace, `+` to add. An elided index -- `::` -- means every item. None of this mutates xs."
+
+[[exercises]]
+name = "core09_where"
+dir = "01_core"
+about = "booleans, where and filtering"
+hint = "A comparison gives a boolean list. `where` converts that to indexes, and `xs where mask` is the filter idiom. `sum` of booleans returns an int, so the expected value ends in i."
+
+[[exercises]]
+name = "core10_sort"
+dir = "01_core"
+about = "sorting, ranking and grouping"
+hint = "`asc`/`desc` sort values; `iasc` returns the sorting INDEXES instead. `group` builds a dictionary from each distinct value to the indexes where it appears."
+
+[[exercises]]
+name = "core11_find_in"
+dir = "01_core"
+about = "searching and set operations"
+hint = "`list?value` finds the first index, returning `count list` when absent. `in` is atomic on its left argument. `except`, `inter` and `union` are the set operations."
+
+[[exercises]]
+name = "core12_strings"
+dir = "01_core"
+about = "chars, strings and symbols"
+hint = "\"abc\" is a list of chars but \"a\" is a char atom. `string` goes symbol -> chars and `` `$ `` goes chars -> symbol. `vs` splits, `sv` joins, `like` pattern-matches."
+
+[[exercises]]
+name = "core13_casting"
+dir = "01_core"
+about = "$ converts between types"
+hint = "A symbol or type code on the left of $ casts: `long$x, 9h$x. A char on the left parses text: \"J\"$ for long, \"D\"$ for date, \"F\"$ for float. Float to long rounds."
+
+[[exercises]]
+name = "core14_dicts"
+dir = "01_core"
+about = "dictionaries"
+hint = "`!` builds a dictionary from a key list and a value list. Index with d`key. `key` and `value` split it apart, `,` merges with the right-hand side winning, and `@` amends without mutating."
+
+[[exercises]]
+name = "core15_functions"
+dir = "01_core"
+about = "lambdas"
+hint = "{x*2} uses the implicit parameter x; {[a;b] a*b} names its own. `$[cond;then;else]` is the conditional, and `:value` inside `if` returns early."
+
+[[exercises]]
+name = "core16_projection"
+dir = "01_core"
+about = "fixing arguments to make new functions"
+hint = "Calling with too few arguments projects: +[10] is a function adding 10. Elide with a semicolon to fix a later argument: {x-y}[;1]. `value` evaluates a string of q code."
+
+[[exercises]]
+name = "core17_each"
+dir = "01_core"
+about = "the each adverb"
+hint = "`f each x` (or f') applies f to one item at a time. You only need it when f wants a whole item -- arithmetic is already atomic, so 2*1 2 3 needs no each."
+
+[[exercises]]
+name = "core18_over_scan"
+dir = "01_core"
+about = "over (/) and scan (\\)"
+hint = "(+/) folds a list to one value, (+\\) keeps every intermediate. A left argument seeds the fold: (+/)[100;list]. `|` is max, so (|\\) is a running maximum."
+
+[[exercises]]
+name = "core19_each_left_right"
+dir = "01_core"
+about = "each-left, each-right and each-both"
+hint = "x f\\: y pairs every item of x with all of y; x f/: y pairs all of x with every item of y; x f' y walks both in step. The each-prior adverb ':  compares each item with the one before."
+
+[[exercises]]
+name = "core20_control"
+dir = "01_core"
+about = "conditionals and loops"
+hint = "$[cond;a;b] needs an ATOM condition; ?[booleans;a;b] chooses item by item over a list. `while` and `do` return nothing, so accumulate into a variable with +: or *:."
+
+[[exercises]]
+name = "core21_errors"
+dir = "01_core"
+about = "signalling and trapping errors"
+hint = "`'\"text\"` signals. @[f;arg;handler] and .[f;arglist;handler] trap: the handler is called with the error text only when f fails, so it doubles as a fallback value."
+
+[[exercises]]
+name = "core22_apply"
+dir = "01_core"
+about = "@ and . apply functions"
+hint = "f@x applies to one argument, f . args to a list of them. Operators are functions: (+) . 2 3. A call built as the list (+;2;3) is run by `value`."
+
+[[exercises]]
+name = "core23_reserved"
+dir = "01_core"
+about = "reserved words and the block-comment trap"
+hint = "Rename the reserved parameter and the reserved column. Then look for a line containing nothing but / -- it opens a block comment that swallows everything until a lone \\."
+
+[[exercises]]
+name = "core24_scope"
+dir = "01_core"
+about = "locals, globals and ::"
+hint = "Inside a lambda, `name:value` makes a local; `name::value` writes to the global. Reading a global needs nothing special."
+
+[[exercises]]
+name = "tbl01_construct"
+dir = "02_tables"
+about = "what a table actually is"
+hint = "([] a:1 2 3; b:`x`y`z) and flip `a`b!(1 2 3;`x`y`z) build the same thing. `count` counts rows, `cols` names columns, and a table is type 98h."
+
+[[exercises]]
+name = "tbl02_columns"
+dir = "02_tables"
+about = "columns and rows"
+hint = "t`price pulls a whole column out as a list. Indexing a table with a row number -- or `first` -- gives a row, which is a dictionary you can index by column name."
+
+[[exercises]]
+name = "tbl03_select"
+dir = "02_tables"
+about = "select and where"
+hint = "select cols from t where constraints. Comma-separated constraints apply in order, each narrowing the next. `count` on the result counts matching rows."
+
+[[exercises]]
+name = "tbl04_compute"
+dir = "02_tables"
+about = "renaming and computing columns"
+hint = "select name:expression from t names a computed column; column names are in scope as lists. `i` is the virtual row-index column."
+
+[[exercises]]
+name = "tbl05_by"
+dir = "02_tables"
+about = "grouping with by"
+hint = "select agg by col from t. The by columns become the key, so the result is a keyed table (type 99h). Leave the aggregation off and each group's values come back as a nested list."
+
+[[exercises]]
+name = "tbl06_exec"
+dir = "02_tables"
+about = "exec unwraps the table"
+hint = "exec col gives a list, exec first col an atom, exec k!v a dictionary. select always gives a table, even for one column."
+
+[[exercises]]
+name = "tbl07_update"
+dir = "02_tables"
+about = "update, and update by"
+hint = "update col:expr from t adds or replaces a column and returns a new table. Add `where` to limit rows, or `by` to compute per group and broadcast back over each row."
+
+[[exercises]]
+name = "tbl08_delete"
+dir = "02_tables"
+about = "deleting rows and columns"
+hint = "`delete from t where ...` drops rows; `delete col from t` drops a column. One or the other, never both in one statement."
+
+[[exercises]]
+name = "tbl09_sort"
+dir = "02_tables"
+about = "xasc and xdesc"
+hint = "`col xasc t` sorts ascending, xdesc descending. A list of columns sorts by each in turn, most significant first."
+
+[[exercises]]
+name = "tbl10_keyed"
+dir = "02_tables"
+about = "keyed tables"
+hint = "`col xkey t` promotes a column to the key; the result indexes like a dictionary, k[`bob], giving a row. `0!k` unkeys it. Keyed tables are type 99h."
+
+[[exercises]]
+name = "tbl11_upsert"
+dir = "02_tables"
+about = "adding and replacing rows"
+hint = "On a keyed table upsert replaces a row whose key matches and appends otherwise. On an unkeyed table there is no key to match, so it always appends."
+
+[[exercises]]
+name = "tbl12_lj"
+dir = "02_tables"
+about = "the left join"
+hint = "`t lj k` needs k to be KEYED. Every row of t survives; unmatched rows get nulls in the new columns, which is what happens to fay."
+
+[[exercises]]
+name = "tbl13_ij_uj"
+dir = "02_tables"
+about = "inner and union joins"
+hint = "`ij` keeps only rows with a match in the keyed table. `uj` stacks two tables and widens to the union of their columns, filling gaps with nulls."
+
+[[exercises]]
+name = "tbl14_xcol"
+dir = "02_tables"
+about = "renaming and reordering columns"
+hint = "`names xcol t` renames the first columns positionally -- pass a one-item list to rename just the first. `names xcols t` moves those columns to the front."
+
+[[exercises]]
+name = "tbl15_meta"
+dir = "02_tables"
+about = "inspecting a table"
+hint = "`meta t` is a keyed table with columns c, t, f and a. Pull pieces out with exec, or index it like any keyed table: m[`price;`t]."
+
+[[exercises]]
+name = "tbl16_attributes"
+dir = "02_tables"
+about = "the s, u, p and g attributes"
+hint = "Apply with `s#list, read back with `attr`. A plain list has the null attribute `. Sorting a table with xasc leaves `s on the column it sorted by."
+
+[[exercises]]
+name = "tbl17_functional"
+dir = "02_tables"
+about = "select built as data"
+hint = "?[t;constraints;by;columns]. Constraints are (op;column;value) triples -- enlist a symbol atom value. by is 0b or a name!column dictionary; columns is () or name!expression."
+
+[[exercises]]
+name = "tbl18_xgroup"
+dir = "02_tables"
+about = "nesting and unnesting"
+hint = "`col xgroup t` keys on col and nests the rest one list per key; `ungroup` explodes it back into flat rows."
+
+[[exercises]]
+name = "tbl19_aggregates"
+dir = "02_tables"
+about = "the aggregation vocabulary"
+hint = "med, dev, var and `count distinct` all work in a select. wavg takes the weights on its LEFT: size wavg price."
+
+[[exercises]]
+name = "tbl20_multi_by"
+dir = "02_tables"
+about = "grouping by more than one thing"
+hint = "by takes several comma-separated expressions, and they can be computed: `by sym, big:size>200`. Each becomes a column of the result's key."
+
+[[exercises]]
+name = "ts01_types"
+dir = "03_timeseries"
+about = "the temporal types"
+hint = "Each granularity has its own literal: 2024.03.15, 09:30:15.250, 2024.03.15D09:30:15.250000000. A date is -14h and a timestamp -12h. Casting a date to a long counts days from 2000.01.01."
+
+[[exercises]]
+name = "ts02_arithmetic"
+dir = "03_timeseries"
+about = "doing sums with time"
+hint = "Adding an integer to a date adds days and subtracting two dates gives days. date+time builds a timestamp; timestamp-timestamp gives a timespan (0D00:01:00.000000000)."
+
+[[exercises]]
+name = "ts03_extraction"
+dir = "03_timeseries"
+about = "pulling pieces out of a timestamp"
+hint = "`date$ts and `time$ts split a timestamp. Dotted attributes work on a NAME: ts.hh, ts.uu, d.month. Beware .mm -- it is the month on a timestamp or date, but minutes on a time."
+
+[[exercises]]
+name = "ts04_xbar"
+dir = "03_timeseries"
+about = "bucketing with xbar"
+hint = "n xbar x rounds down to multiples of n, in whatever unit the value counts. A time counts milliseconds, so 60000 xbar gives minutes; a minute counts minutes, so 5 xbar gives five-minute buckets."
+
+[[exercises]]
+name = "ts05_windows"
+dir = "03_timeseries"
+about = "selecting a time range"
+hint = "Two comma-separated comparisons, or `time within (a;b)` -- written `time within 09:31:00.000 09:32:15.000` -- which is inclusive at both ends."
+
+[[exercises]]
+name = "ts06_prev_deltas"
+dir = "03_timeseries"
+about = "looking at the row before"
+hint = "prev/next shift by one and pad with a null. deltas and ratios compare each item with its predecessor but leave the first item untouched, so drop it with 1_."
+
+[[exercises]]
+name = "ts07_moving"
+dir = "03_timeseries"
+about = "moving windows"
+hint = "`n mavg x`, and likewise msum, mmax, mmin, mdev. The first n-1 results use however many items exist so far rather than being null, so the output length matches the input."
+
+[[exercises]]
+name = "ts08_running"
+dir = "03_timeseries"
+about = "running totals"
+hint = "sums, maxs, mins and prds accumulate over everything seen so far -- they are scan over +, |, & and *."
+
+[[exercises]]
+name = "ts09_fills"
+dir = "03_timeseries"
+about = "carrying values forward"
+hint = "`fills` carries the last non-null value forward. A leading null has nothing before it to carry, so clean that up afterwards with 0^."
+
+[[exercises]]
+name = "ts10_bin"
+dir = "03_timeseries"
+about = "binary search with bin"
+hint = "`xs bin y` gives the index of the last item of the SORTED list xs that is <= y, or -1 if y precedes everything. Index back into xs to get the prevailing value."
+
+[[exercises]]
+name = "ts11_ohlc"
+dir = "03_timeseries"
+about = "building OHLC bars"
+hint = "select open:first price, high:max price, low:min price, close:last price by bucket:60000 xbar time from trade. first and last depend on row order."
+
+[[exercises]]
+name = "ts12_vwap"
+dir = "03_timeseries"
+about = "volume weighted average price"
+hint = "`size wavg price` -- weights on the left. It works standalone in an exec or per group in a by-clause."
+
+[[exercises]]
+name = "ts13_aj"
+dir = "03_timeseries"
+about = "the asof join"
+hint = "aj[`sym`time;trade;quote] matches the last named column as-of and the rest exactly. Sort the quote table with `sym`time xasc and put `p# on sym first -- aj gives wrong answers, not errors, without it."
+
+[[exercises]]
+name = "ts14_aj_gaps"
+dir = "03_timeseries"
+about = "what asof does at the edges"
+hint = "No prior row means nulls, not a dropped row. Arithmetic on a null gives a null, and avg skips it silently. `price^bid` fills from another column."
+
+[[exercises]]
+name = "ts15_wj"
+dir = "03_timeseries"
+about = "the window join"
+hint = "wj[(starts;ends);cols;t;(q;(min;`bid);(max;`ask))]. Build the window lists from trade.time. An empty window yields the aggregation's identity -- 0w for min -- which is not null."
+
+[[exercises]]
+name = "ts16_splayed"
+dir = "03_timeseries"
+about = "writing tables to disk"
+hint = "`path set value` writes and `get path` reads. A trailing slash on the path splays the table into one file per column. `key dir` lists what landed there."
+
+[[exercises]]
+name = "ts17_partitioned"
+dir = "03_timeseries"
+about = "a partitioned database"
+hint = "Loading the db gives a virtual `date` column and a `date` variable listing the partitions. Constrain on date FIRST in the where clause so whole partitions are skipped."
+
+[[exercises]]
+name = "ts18_disk_query"
+dir = "03_timeseries"
+about = "what changes once the data is on disk"
+hint = "exec and most joins signal 'nyi on a partitioned table. Select the slice into memory first, then treat it as a normal table. Trap an error with @[f;::;{x}] to capture its text."
+
+[[exercises]]
+name = "io01_namespaces"
+dir = "04_io"
+about = "organising code into namespaces"
+hint = "Define straight into the namespace: .util.double:{2*x}. `key `.util` lists its contents. A namespaced name never appears in the root namespace."
+
+[[exercises]]
+name = "io02_env"
+dir = "04_io"
+about = "the .z namespace and system commands"
+hint = ".z.d is today, .z.p the current timestamp, .z.K the version. `getenv` takes a symbol and returns a string. `like` pattern-matches a string."
+
+[[exercises]]
+name = "io03_files"
+dir = "04_io"
+about = "paths and directories"
+hint = "A path is a symbol starting with a colon; `hsym` builds one from a string. `key` lists a directory and returns an empty general list () for a path that does not exist."
+
+[[exercises]]
+name = "io04_text"
+dir = "04_io"
+about = "reading and writing text"
+hint = "`path 0: lines` writes a list of strings; `read0 path` reads them back. lines[;0] gives the first character of every line."
+
+[[exercises]]
+name = "io05_csv"
+dir = "04_io"
+about = "CSV in and out"
+hint = "`csv 0: t` renders a table as CSV lines. Reading needs one type character per column: (\"JS\";enlist \",\") 0: path. Enlisting the delimiter says the first line is a header."
+
+[[exercises]]
+name = "io06_serialize"
+dir = "04_io"
+about = "q's own binary format"
+hint = "-8! serialises to bytes (type 4h) and -9! deserialises. `path set value` and `get path` do the same thing via a file."
+
+[[exercises]]
+name = "io07_json"
+dir = "04_io"
+about = "JSON, and what it loses"
+hint = ".j.j renders and .j.k parses. The round trip is lossy: numbers return as floats and symbols as strings, so cast back with `long$ and `$."
+
+[[exercises]]
+name = "io08_hopen"
+dir = "04_io"
+about = "connecting to another q process"
+hint = "hopen `$\":localhost:\",string PORT returns a handle. Calling the handle with a string sends a synchronous request and returns the reply. .z.i is the process id."
+
+[[exercises]]
+name = "io09_messages"
+dir = "04_io"
+about = "the two ways to send a request"
+hint = "h\"expr\" makes the remote parse text; h(`fn;arg) sends the call as data, keeping argument types and parsing nothing. Pass :: as the argument for a niladic call."
+
+[[exercises]]
+name = "io10_async"
+dir = "04_io"
+about = "fire and forget"
+hint = "neg[h] msg sends asynchronously and returns the generic null (::). Messages are handled in order, so a following synchronous call flushes anything queued."
+
+[[exercises]]
+name = "io11_remote_data"
+dir = "04_io"
+about = "querying another process"
+hint = "Tables cross the wire as ordinary values. Send the aggregation to the server -- h\"select cnt:count i by sym from px\" -- rather than pulling the raw table back."
+
+[[exercises]]
+name = "io12_ipc_errors"
+dir = "04_io"
+about = "when the far side fails"
+hint = "A remote error re-signals locally, so trap it with @[h;(`fn;::);{x}]. hopen to a dead port fails too -- trap that with @[hopen;path;{`refused}]."
+
+[[exercises]]
+name = "io13_one_shot"
+dir = "04_io"
+about = "connections you do not keep"
+hint = "Apply the connection symbol straight to the message: `:localhost:PORT \"2+2\". hopen takes (path;milliseconds) to bound the wait, and a refused connection signals an error beginning \"hop\"."
+
+[[exercises]]
+name = "io14_capstone"
+dir = "04_io"
+about = "put it all together"
+hint = "select the date off disk, aggregate with `size wavg price` and `count i` by sym, 0! to unkey, lj to `sym xkey select from ref, then h(set;`report;report) to store it remotely."

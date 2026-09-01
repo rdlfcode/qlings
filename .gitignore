@@ -1,0 +1,10 @@
+# build output
+/target
+
+# the learner's working copy, staged from templates/ by `qlings setup`
+/exercises
+
+# generated sample data
+/data/db
+/data/ref
+/data/scratch
